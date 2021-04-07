@@ -15,12 +15,16 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path
-from Enrollapp.views import register
+from Enrollapp.views import register, create_account
 from django.conf.urls import url,include
-
+from django.views.generic import TemplateView
+import os
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('register/', register, name = "autocomplete")
+    path('register/', register, name = "autocomplete"),
+    path('register/Enroll_user/', TemplateView.as_view(template_name=os.path.join("enrollapp","Old_user.html"))),
+    path('register/Enroll_user/Enroll',create_account),
+    path('register/Enroll_user/Update',TemplateView.as_view(template_name=os.path.join("enrollapp","update_school_verify.html")))
 ]
 
 

@@ -1,0 +1,110 @@
+ {% extends "enrollapp/base.html" %}
+{% block body_block %}
+
+<script type="text/javascript">
+	function yesnoCheck() {
+    if (document.getElementById('yesCheck').checked) {
+        document.getElementById('ifYes').style.visibility = 'visible';
+
+    }
+    else {
+    	document.getElementById('ifYes').style.visibility = 'hidden';
+    }
+
+}
+
+</script>
+    
+
+        
+        
+ <div class = "bg"></div>
+  <input type="hidden" name="formID" value="210562249580455" />
+  <input type="hidden" id="JWTContainer" value="" />
+  <input type="hidden" id="cardinalOrderNumber" value="" />
+  <div role="main" class="form-all">
+    <ul class="form-section page-section">
+      <li id="cid_43" class="form-input-wide" data-type="control_head">
+        <div class="form-header-group  header-large">
+          <div class="header-text httal htvam">
+            <h1 id="header_43" class="form-header" data-component="header">
+              Enrollment Form for Nagaed Digital School
+            </h1>
+            <div id="subHeader_43" class="form-subHeader">
+              User already exists. Did you change the school ? &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<br>
+               <input type="radio" onclick="javascript:yesnoCheck();" name="yesno" id="yesCheck"> Yes <br> 
+               <input type="radio" onclick="javascript:yesnoCheck();" name="yesno" id="noCheck"> No <br>
+    
+            </div>
+          </div>
+        </div>
+<form action="">
+	<!--common options-->
+	<li class="form-line jf-required" data-type="control_email" name="otherAnswer" id="otherAnswer" >
+        <label class="form-label form-label-top form-label-auto" id="yes_options" for="yes_options">
+          E-mail Address
+          <span class="form-required">
+            *
+          </span>
+        </label>
+        <div id="yes_options" class="form-input-wide jf-required" data-layout="half">
+          <span class="form-sub-label-container" style="vertical-align:top">
+            <input type="email" id="yes_options" name="q55_emailAddress" class="form-textbox validate[required, Email]" style="width:310px" size="310" value="" placeholder="ex: myname@example.com" data-component="email" aria-labelledby="label_55 sublabel_input_55" required="" />
+            <label class="form-sub-label" for="yes_options" id="sublabel_input_55" style="min-height:13px" aria-hidden="false"> example@example.com </label>
+          </span>
+        </div>
+      </li>
+	 <div class="container">
+        <div class="jumbotron">
+       
+        
+        <li class="form-line jf-required" data-type="control_phone" id="yes_options">
+        <label class="form-label form-label-top form-label-auto" id="yes_options" >
+          School Name <span class="form-required">
+            *
+          </span>
+        </label>
+            <input type="text" name="schoolname" id = "schoolname"  class="form-textbox validate[required, Email]" style="width:310px" size="310" value="" required="" />
+            
+         
+             </li> 
+         </div>
+         
+
+     </div>
+		<!--options for Yes-->  
+		    <div id="ifYes" style="visibility:hidden">
+		     <li class="form-line jf-required"  id="id_1">
+		        <label class="form-label form-label-top form-label-auto" id="label_1" for="input_1_full">
+		          Class
+		          <span class="form-required">
+		            *
+		          </span>
+		        </label>
+		        <div id="cid_1" class="form-input-wide jf-required" data-layout="half">
+		          <span class="form-sub-label-container" style="vertical-align:top">
+		            <input type="form-textbox" id="input_1_full" name="q41_phone[full]"  style="width:310px" data-masked="true" value=""  data-component="standard" aria-labelledby="label_1" required="" />
+		            <label class="form-sub-label is-empty" for="input_1_full" id="sublabel_1_masked" style="min-height:13px" aria-hidden="false">  </label>
+		          </span>
+		        </div>
+		      </li> 
+  		</div>
+  			<form method="" action="Update">
+  		  		<button type="submit">Update </button>
+  		  	</form>
+             	<!--input type="submit" value="Update Enrollment"-->
+ <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+  <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+ <script >
+  $( function() {
+    
+    $( "#schoolname" ).autocomplete({
+      source: '{% url 'autocomplete' %}'
+    });
+  } );
+
+
+
+</script>
+</form>
+{% endblock %}

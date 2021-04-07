@@ -81,15 +81,40 @@
           </span>
         </div>
       </li> 
-     
+      <div class="container">
+        <div class="jumbotron">
+       {% csrf_token %}
+          
+          {{ profile_form.as_p }}
+        
+        <li class="form-line jf-required" data-type="control_phone" id="id_42">
+        <label class="form-label form-label-top form-label-auto" id="label_42" >
+          School Name <span class="form-required">
+            *
+          </span>
+        </label>
+            <input type="text" name="schoolname" id = "schoolname"  class="form-textbox validate[required, Email]" style="width:310px" size="310" value="" required="" />
+            
+         
+             </li> 
    <center><h4><b> <!--input type="submit" name="" value="Enroll" style="height:50px; width:150px" -->
      <input type="checkbox" name="terms" id="terms" onchange="activateButton(this)">  I Agree Terms & Coditions
-     <br><br>     
-        <button class="button button4" name="submit" id="submit">Enroll</button>
+     <br><br>
+    <button class="button button4" name="submit" id="submit">Enroll</button>
    </center>  
     </div>
       </div>
       </form>
 
-  
+  <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+  <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+  <script >
+  $( function() {
+    
+    $( "#schoolname" ).autocomplete({
+      source: '{% url 'autocomplete' %}'
+    });
+  } );
+
+</script>
 {% endblock %}
