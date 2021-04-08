@@ -23,7 +23,7 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('register/', register, name = "autocomplete"),
     path('register/Enroll_user/', TemplateView.as_view(template_name=os.path.join("enrollapp","Old_user.html"))),
-    path('register/Enroll_user/Enroll',create_account),
+    path('register/Enroll',TemplateView.as_view(template_name=os.path.join("enrollapp","update_school_sucess.html"))),
     path('register/Enroll_user/Update',TemplateView.as_view(template_name=os.path.join("enrollapp","update_school_verify.html")))
 ]
 

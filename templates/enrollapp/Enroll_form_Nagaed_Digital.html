@@ -4,7 +4,7 @@
 {% block body_block %}
 <body style="background-color:#8282f6" onload="disableSubmit()" oncontextmenu="return false">
   <form method="" action="Enroll_user">
-                  <button class="button button5" >Already a User? Sign in here.</button>
+                  <button class="button button5" >Already a User? Update here.</button>
                 </form>
  <form enctype="multipart/form-data" action="Enroll" method="POST">
 
@@ -90,6 +90,28 @@
         <li class="form-line jf-required" data-type="control_phone" id="id_42">
         <label class="form-label form-label-top form-label-auto" id="label_42" >
           School Name <span class="form-required">
+            *
+          </span>
+        </label>
+            <input type="text" name="schoolname" id = "schoolname"  class="form-textbox validate[required, Email]" style="width:310px" size="310" value="" required="" />
+            
+         
+             </li> 
+
+        <li class="form-line jf-required" data-type="control_phone" id="id_42">
+        <label class="form-label form-label-top form-label-auto" id="label_42" >
+          Class <span class="form-required">
+            *
+          </span>
+        </label>
+            <input type="text" name="schoolname" id = "schoolname"  class="form-textbox validate[required, Email]" style="width:310px" size="310" value="" required="" />
+            
+         
+             </li> 
+
+        <li class="form-line jf-required" data-type="control_phone" id="id_42">
+        <label class="form-label form-label-top form-label-auto" id="label_42" >
+          Gender <span class="form-required">
             *
           </span>
         </label>
