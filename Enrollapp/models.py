@@ -13,6 +13,8 @@ class UserProfileInfo(models.Model):
 	Role = models.CharField(choices=User_type_choices,max_length=20)
 	CLASS_CHOICES = (('8','Class 8'),('9','Class 9'),('10','Class 10'),('11','Class 11'),('12','Class 12'))
 	standard = models.CharField(max_length=4, choices=CLASS_CHOICES)
+	sis_id = models.IntegerField(default=1)
+
 
 class Schools(models.Model):
 	Name = models.CharField(max_length=500)
