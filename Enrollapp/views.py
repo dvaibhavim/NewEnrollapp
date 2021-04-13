@@ -4,8 +4,7 @@ from Enrollapp.forms import  UserForm,UserProfileInfoForm
 from canvasapi import Canvas
 from django.views.decorators.csrf import csrf_exempt
 from Enrollapp.models import UserProfileInfo, Schools
-from django.contrib.auth.models import User
-
+from django.contrib.auth.models import User 
 # Create your views here.
 
 @csrf_exempt
@@ -27,17 +26,19 @@ def create_account_NDS(request):
         #user_form = UserForm(data=request.POST)
         #profile_form = UserProfileInfoForm(data=request.POST)
         #user = user_form.save(commit=False);
-        user  = User.objects.create_user(request.POST.get("q55_emailAddress"), request.POST.get("q55_emailAddress"), User.set_unusable_password())
-        user.save()                           
-        #profile = UserProfileInfoForm.save(commit=False)
-        UserProfileInfo.user = user
+        user  = User.objects.create_user(request.POST.get("q55_emailAddress"), request.POST.get("q55_emailAddress"))
+        user.set_password(user.set_unusable_password())
+        user.save()      
+        sis_id = UserProfileInfo.objects.order_by('sis_id').last()                     
+        profile = UserProfileInfo.objects.create(user = user,date_of_birth=request.POST.get("q39_birthDate39[day]")+"/"+request.POST.get("q39_birthDate39[month]")+"/"+request.POST.get("q39_birthDate39[year]"),firstname = request.POST.get("q56_name[first]"),lastname = request.POST.get("q56_name[last]"),gender = request.POST.get("Gender"),Role = request.POST.get("role"),standard = request.POST.get("standard"),sis_id = int(sis_id.sis_id)+1)
+        '''UserProfileInfo.user = user
         UserProfileInfo.firstname = request.POST.get("q56_name[first]")
         UserProfileInfo.lastname = request.POST.get("q56_name[last]")
         UserProfileInfo.gender = request.POST.get("Gender")
         UserProfileInfo.Role = request.POST.get("role")
         UserProfileInfo.standard = request.POST.get("standard")
-        sis_id = UserProfileInfo.objects.order_by('sis_id').last()
-        UserProfileInfo.sis_id = int(sis_id.sis_id)+1
+        
+        UserProfileInfo.sis_id = int(sis_id.sis_id)+1'''
         
         API_URL = "https://learn.nagaed.com/"
     # Canvas API key
@@ -65,7 +66,7 @@ def create_account_NDS(request):
                             'skip_confirmation': False
                         }
                     )
-            UserProfileInfo.save()
+            profile.save()
             registered = True
             school_name = "NagaEd Digital School"
             sub_accounts =  account.get_subaccounts()
