@@ -1,14 +1,19 @@
 from django.shortcuts import render
 from django.http import JsonResponse
 from Enrollapp.forms import  UserProfileInfoForm
-from Enrollapp.models import Schools
+from Enrollapp.models import Schools,UserProfileInfo
 from canvasapi import Canvas
+from django.views.decorators.csrf import csrf_exempt
 
 # Create your views here.
 
+@csrf_exempt
+def success(request):
+    return render(request,'enrollapp/update_school_sucess.html')
+
 #logic to create account in NagaedEd digital and enroll user to corresponsing class courses
+@csrf_exempt
 def create_account_NDS(request):
-    profile_form = UserProfileInfoForm()
     if 'term' in request.GET:
         qs = Schools.objects.filter(Name__istartswith = request.GET.get('term')) #i stands for case insensitive
         school_name = list() #the url in javascript expects an json response
@@ -17,6 +22,7 @@ def create_account_NDS(request):
 
         return JsonResponse(school_name, safe=False)
     elif request.method=="POST":
+        sis_id=0
         API_URL = "https://learn.nagaed.com/"
     # Canvas API key
         API_KEY = "puoPtPQS1lGkhuaPEhmTreh2MZTtj1clp4OEiZ1UVVpugZBOn76WBue5Zf3MKBl5"    
@@ -25,14 +31,15 @@ def create_account_NDS(request):
         if request.method=="POST":
             account = canvas.get_account(1)
             #sis_user_id generation logic 
-            sis_id = UserProfileInfo.objects.filter(name='sis_id').last()
+            sis_id = UserProfileInfo.objects.order_by('sis_id').last()
+            print(sis_id,sis_id.sis_id)
             user_Canvas = account.create_user(
                         user={
                             'name': request.POST.get("q56_name[first]")+" "+ request.POST.get("q56_name[last]"), # profile.firstname + " " + profile.lastname,
                             'skip_registration': False
                         },
                         pseudonym={                        
-                            'sis_user_id': int(sis_id)+1,
+                            'sis_user_id': int(sis_id.sis_id)+1,
                             'unique_id' :request.POST.get("q55_emailAddress"),
                             'send_confirmation':True,
                             'address':request.POST.get("q55_emailAddress")
@@ -47,17 +54,20 @@ def create_account_NDS(request):
             for accounts in sub_accounts:
                 if accounts.name.lower() == school_name.lower():
                     sub_account = accounts
-            
+           
             #logic to get all courses for the standard of corresponding school school_name    
             courses = sub_account.get_courses()
         #get the school code and append the standard to it
             standard = request.POST.get("class_school")
+            standard = int(standard)
+
+            print(sub_account, standard)
             #school_code = "CHS"
             try:
                 if standard<10:
-                    std ="CL0"+standard
+                    std ="CL0"+str(standard)
                 else:
-                    std = "CL"+standard
+                    std = "CL"+str(standard)
                 for c in courses:
                     if  std in c.sis_course_id:
                         if not c.blueprint:
@@ -66,12 +76,13 @@ def create_account_NDS(request):
                 print(e)
             
     else:
-        return render(request,'enrollapp/Enroll_form_Nagaed_Digital.html',{'profile_form':profile_form})
-    return render(request,'enrollapp/update_school_success.html')
+        return render(request,'enrollapp/Enroll_form_Nagaed_Digital.html')
+    return render(request,'enrollapp/update_school_sucess.html')
 
 
 
 #logic to register Naged Digital student to another school 
+@csrf_exempt
 def register(request):
     #user_form = UserForm()
     profile_form = UserProfileInfoForm()
@@ -134,6 +145,7 @@ def register(request):
 
 
 """function to create new user and send registration email. If the account gets created, course is also assigned to the student. """
+@csrf_exempt
 def create_account(request):
          #Canvas Api Url
     API_URL = "https://learn.nagaed.com/"

@@ -74,20 +74,18 @@
      </div>
 		<!--options for Yes-->  
 		    <div id="ifYes" style="visibility:hidden">
-		     <li class="form-line jf-required"  id="id_1">
-		        <label class="form-label form-label-top form-label-auto" id="label_1" for="input_1_full">
-		          Class
-		          <span class="form-required">
-		            *
-		          </span>
-		        </label>
-		        <div id="cid_1" class="form-input-wide jf-required" data-layout="half">
-		          <span class="form-sub-label-container" style="vertical-align:top">
-		            <input type="form-textbox" id="input_1_full" name="q41_phone[full]"  style="width:310px" data-masked="true" value=""  data-component="standard" aria-labelledby="label_1" required="" />
-		            <label class="form-sub-label is-empty" for="input_1_full" id="sublabel_1_masked" style="min-height:13px" aria-hidden="false">  </label>
-		          </span>
-		        </div>
-		      </li> 
+		     <li class="form-line jf-required" data-type="control_phone" id="id_42">
+         <label class="form-label form-label-top form-label-auto" id="label_42" >
+            Class <span class="form-required">
+            * 
+            <select id="class_school" name="class_school" class="form-textbox"  style="width:310px" value="" required="">
+              <option value="8">8</option>
+              <option value="9">9</option>
+              <option value="10">10</option>
+              <option value="11">11</option>
+              <option value="12">12</option>        
+           </select> </label></span>
+         </li>
   		</div>
   			<form method="" action="Update">
   		  		<button type="submit">Update </button>
