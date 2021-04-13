@@ -1,10 +1,9 @@
 from django.shortcuts import render
 from django.http import JsonResponse
-from Enrollapp.forms import  UserProfileInfoForm
-from Enrollapp.models import Schools,UserProfileInfo
+from Enrollapp.forms import  UserForm,UserProfileInfoForm
 from canvasapi import Canvas
 from django.views.decorators.csrf import csrf_exempt
-
+from Enrollapp.models import UserProfileInfo, Schools
 # Create your views here.
 
 @csrf_exempt
@@ -22,7 +21,23 @@ def create_account_NDS(request):
 
         return JsonResponse(school_name, safe=False)
     elif request.method=="POST":
-        sis_id=0
+        registered = False
+        user_form = UserForm(data=request.POST)
+        profile_form = UserProfileInfoForm(data=request.POST)
+        user = user_form.save(commit=False);
+        User.username =request.POST.get("q55_emailAddress")
+        user.set_password(set_unusable_password())  
+        user.save()                           
+        profile = UserProfileInfoForm.save(commit=False)
+        profile.user = user
+        profile.firstname = request.POST.get("q56_name[first]")
+        profile.lastname = request.POST.get("q56_name[last]")
+        profile.gender = request.POST.get("Gender")
+        profile.Role = request.POST.get("role")
+        profile.standard = request.POST.get("standard")
+        sis_id = UserProfileInfo.objects.order_by('sis_id').last()
+        profile.sis_id = int(sis_id.sis_id)+1
+        profile.save()
         API_URL = "https://learn.nagaed.com/"
     # Canvas API key
         API_KEY = "puoPtPQS1lGkhuaPEhmTreh2MZTtj1clp4OEiZ1UVVpugZBOn76WBue5Zf3MKBl5"    
@@ -31,7 +46,7 @@ def create_account_NDS(request):
         if request.method=="POST":
             account = canvas.get_account(1)
             #sis_user_id generation logic 
-            sis_id = UserProfileInfo.objects.order_by('sis_id').last()
+            
             print(sis_id,sis_id.sis_id)
             user_Canvas = account.create_user(
                         user={
@@ -49,6 +64,7 @@ def create_account_NDS(request):
                             'skip_confirmation': False
                         }
                     )
+            registered = True
             school_name = "NagaEd Digital School"
             sub_accounts =  account.get_subaccounts()
             for accounts in sub_accounts:
