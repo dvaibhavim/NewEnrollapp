@@ -29,7 +29,7 @@ APPEND_SLASH=False
 SECRET_KEY = '8zsh*$#tc6zj_(2vx+g1l(zvk$1d7s6p1$ge+5e-+9=stfkvh@'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = True
 
 ALLOWED_HOSTS = ['*']
 

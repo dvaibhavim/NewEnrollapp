@@ -13,6 +13,8 @@
               Enrollment Form for Nagaed Digital School
             </h1>
             <div id="subHeader_43" class="form-subHeader">
-				      <p>Thanks for Enrolling. “Name of student” is now enrolled in “School Name” </p>
+              {% csrf_token %}
+				      <p>Thanks for Enrolling. {{name}} is now enrolled in {{school}} </p>
+              
 			</div>
 {% endblock %}
