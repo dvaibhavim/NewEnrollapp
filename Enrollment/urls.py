@@ -15,9 +15,12 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path
-from Enrollapp.views import register, create_account,create_account_NDS,success
+from Enrollapp.views import register, create_account,create_account_NDS,success, handle404
 from django.conf.urls import url,include
 from django.views.generic import TemplateView
+from django.conf.urls import handler404
+handler404 = handle404
+
 import os
 urlpatterns = [
     path('admin/', admin.site.urls),

@@ -11,6 +11,10 @@ from django.contrib.auth.models import User
 def success(request):
     return render(request,'enrollapp/update_school_sucess.html')
 
+# Create your views here.
+def handle404(request, exception):
+     return render(request, 'enrollapp/404.html', status=404)
+
 #logic to create account in NagaedEd digital and enroll user to corresponsing class courses
 @csrf_exempt
 def create_account_NDS(request):
