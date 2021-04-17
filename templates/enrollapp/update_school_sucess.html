@@ -1,0 +1,20 @@
+ {% extends "enrollapp/base.html" %}
+{% block body_block %}
+ <div class = "bg"></div>
+  <input type="hidden" name="formID" value="210562249580455" />
+  <input type="hidden" id="JWTContainer" value="" />
+  <input type="hidden" id="cardinalOrderNumber" value="" />
+  <div role="main" class="form-all">
+    <ul class="form-section page-section">
+      <li id="cid_43" class="form-input-wide" data-type="control_head">
+        <div class="form-header-group  header-large">
+          <div class="header-text httal htvam">
+            <h1 id="header_43" class="form-header" data-component="header">
+              Enrollment Form for Nagaed Digital School
+            </h1>
+            <div id="subHeader_43" class="form-subHeader">
+              {% csrf_token %}
+				      <p>Thanks for Enrolling. {{name}} is now enrolled in {{school}} </p>
+              
+			</div>
+{% endblock %}

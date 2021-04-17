@@ -1,0 +1,95 @@
+
+ <!-- the oncontext menu diables the right click-->
+ {% extends "enrollapp/base.html" %}
+{% block body_block %}
+<body style="background-color:#8282f6" onload="disableSubmit()" oncontextmenu="return false">
+  <form method="" action="Enroll_user">
+                  <button class="button button5" >Already a User? Sign in here.</button>
+                </form>
+ <form enctype="multipart/form-data" action="Enroll" method="POST">
+
+  <!-- the oncontext menu diables the right clickform class="jotform-form" action="https://submit.jotform.com/submit/210562249580455/" method="post" name="form_210562249580455" id="210562249580455" accept-charset="utf-8" autocomplete="on"-->
+     <div class = "bg"></div>
+  <input type="hidden" name="formID" value="210562249580455" />
+  <input type="hidden" id="JWTContainer" value="" />
+  <input type="hidden" id="cardinalOrderNumber" value="" />
+  <div role="main" class="form-all">
+    <ul class="form-section page-section">
+      <li id="cid_43" class="form-input-wide" data-type="control_head">
+        <div class="form-header-group  header-large">
+          <div class="header-text httal htvam">
+            <h1 id="header_43" class="form-header" data-component="header">
+              Enrollment Form for Nagaed Digital School
+            </h1>
+            <div id="subHeader_43" class="form-subHeader">
+              Enter your information below &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+              
+            </div>
+          </div>
+        </div>
+      </li>
+      <li class="form-line jf-required" data-type="control_email" id="id_55">
+        <label class="form-label form-label-top form-label-auto" id="label_55" for="input_55">
+          E-mail Address
+          <span class="form-required">
+            *
+          </span>
+        </label>
+        <div id="cid_55" class="form-input-wide jf-required" data-layout="half">
+          <span class="form-sub-label-container" style="vertical-align:top">
+            <input type="email" id="input_55" name="q55_emailAddress" class="form-textbox validate[required, Email]" style="width:310px" size="310" value="" placeholder="ex: myname@example.com" data-component="email" aria-labelledby="label_55 sublabel_input_55" required="" />
+            <label class="form-sub-label" for="input_55" id="sublabel_input_55" style="min-height:13px" aria-hidden="false"> example@example.com </label>
+          </span>
+        </div>
+      </li>
+        <li class="form-line jf-required" data-type="control_fullname" id="id_56">
+        <label class="form-label form-label-top form-label-extended form-label-auto" id="label_56" for="first_56">
+          Name
+          <span class="form-required">
+            *
+          </span>
+        </label>
+        <div id="cid_56" class="form-input-wide jf-required" data-layout="full">
+          <div data-wrapper-react="true" class="extended">
+            <span class="form-sub-label-container" style="vertical-align:top" data-input-type="first">
+              <input type="text" id="first_56" name="q56_name[first]" class="form-textbox validate[required]" size="10" value="" data-component="first" aria-labelledby="label_56 sublabel_56_first" required="" />
+              <label class="form-sub-label" for="first_56" id="sublabel_56_first" style="min-height:13px" aria-hidden="false"> First Name </label>
+            </span>
+            <span class="form-sub-label-container" style="vertical-align:top" data-input-type="middle">
+              <input type="text" id="middle_56" name="q56_name[middle]" class="form-textbox" size="10" value="" data-component="middle" aria-labelledby="label_56 sublabel_56_middle" required="" />
+              <label class="form-sub-label" for="middle_56" id="sublabel_56_middle" style="min-height:13px" aria-hidden="false"> Middle Initial </label>
+            </span>
+            <span class="form-sub-label-container" style="vertical-align:top" data-input-type="last">
+              <input type="text" id="last_56" name="q56_name[last]" class="form-textbox validate[required]" size="15" value="" data-component="last" aria-labelledby="label_56 sublabel_56_last" required="" />
+              <label class="form-sub-label" for="last_56" id="sublabel_56_last" style="min-height:13px" aria-hidden="false"> Last Name </label>
+            </span>
+          </div>
+        </div>
+      </li>
+
+      <li class="form-line jf-required" data-type="control_phone" id="id_41">
+        <label class="form-label form-label-top form-label-auto" id="label_41" for="input_41_full">
+          Phone
+          <span class="form-required">
+            *
+          </span>
+        </label>
+        <div id="cid_41" class="form-input-wide jf-required" data-layout="half">
+          <span class="form-sub-label-container" style="vertical-align:top">
+            <input type="tel" id="input_41_full" name="q41_phone[full]" data-type="mask-number" class="mask-phone-number form-textbox validate[required, Fill Mask]" style="width:310px" data-masked="true" value="" placeholder="(000) 000-0000" data-component="phone" aria-labelledby="label_41" required="" />
+            <label class="form-sub-label is-empty" for="input_41_full" id="sublabel_41_masked" style="min-height:13px" aria-hidden="false">  </label>
+          </span>
+        </div>
+      </li> 
+     
+   <center><h4><b> <!--input type="submit" name="" value="Enroll" style="height:50px; width:150px" -->
+     <input type="checkbox" name="terms" id="terms" onchange="activateButton(this)">  I Agree Terms & Coditions
+     <br><br>     
+        <button class="button button4" name="submit" id="submit">Enroll</button>
+   </center>  
+    </div>
+      </div>
+      </form>
+
+  
+{% endblock %}
