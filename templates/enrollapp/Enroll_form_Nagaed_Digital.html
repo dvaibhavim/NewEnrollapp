@@ -3,10 +3,10 @@
  {% extends "enrollapp/base.html" %}
 {% block body_block %}
 <body style="background-color:#8282f6" onload="disableSubmit()" oncontextmenu="return false">
-  <form method="" action="Enroll_user">
+ <form method="" action="Enroll_user">
                   <button class="button button5" >Already a User? Update here.</button>
                 </form>
- <form enctype="multipart/form-data" action="Enroll" method="POST">
+ <form enctype="multipart/form-data" action="Enroll" method="POST" autocomplete="on">
   <!-- the oncontext menu diables the right clickform class="jotform-form" action="https://submit.jotform.com/submit/210562249580455/" method="post" name="form_210562249580455" id="210562249580455" accept-charset="utf-8" autocomplete="on"-->
      <div class = "bg"></div>
   <input type="hidden" name="formID" value="210562249580455" />
@@ -276,7 +276,7 @@
 
 
    <center><h4><b> <!--input type="submit" name="" value="Enroll" style="height:50px; width:150px" -->
-     <input type="checkbox" name="terms" id="terms" onchange="activateButton(this)">  I Agree Terms & Coditions
+     <input type="checkbox" name="terms" id="terms" onchange="activateButton(this)">  I Agree on the <a href="https://www.nagaed.com/privacy-policy/" target="_blank">privacy policy</a> and <a href="https://www.nagaed.com/terms-of-use/" target="_blank"> Terms & Coditions</a>
      <br><br>
     <button class="button button4" value="Enroll" name="Enroll" id="Enroll">Enroll</button>
    </center>  

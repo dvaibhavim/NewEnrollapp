@@ -10,11 +10,11 @@
         <div class="form-header-group  header-large">
           <div class="header-text httal htvam">
             <h1 id="header_43" class="form-header" data-component="header">
-              Enrollment Form for Nagaed Digital School
+              Successful enrollment.
             </h1>
             <div id="subHeader_43" class="form-subHeader">
               {% csrf_token %}
-				      <p>Thanks for Enrolling. {{name}} is now enrolled in {{school}} </p>
+				      <p>Please click on the confirmation link sent to {{ name }} to complete your enrollment for {{ school }}.  </p>
               
 			</div>
 {% endblock %}

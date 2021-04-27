@@ -15,7 +15,7 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path
-from Enrollapp.views import register, create_account,create_account_NDS,success, handle404
+from Enrollapp.views import register, create_account_NDS,success, handle404,old_user_update, create_account_CHSS
 from django.conf.urls import url,include
 from django.views.generic import TemplateView
 from django.conf.urls import handler404
@@ -25,10 +25,12 @@ import os
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('register/', create_account_NDS, name = "autocomplete"),
-    path('success',success),
-    path('register/Enroll_user', TemplateView.as_view(template_name=os.path.join("enrollapp","Old_user.html"))),
     path('register/Enroll',create_account_NDS),
-    path('register/Enroll_user/Update',TemplateView.as_view(template_name=os.path.join("enrollapp","update_school_verify.html")))
+    path('CHSS/',create_account_CHSS, name="autocomplete"),
+    path('CHSS/Enroll',create_account_CHSS),
+    path('success',success),
+    path('register/Enroll_user', old_user_update, name="autocomplete"),
+    path('register/Enroll_user/Update',TemplateView.as_view(template_name=os.path.join("enrollapp","update_school_verify.html"))),
 ]
 
 

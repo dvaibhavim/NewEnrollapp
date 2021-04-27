@@ -2,13 +2,13 @@
 {% block body_block %}
 
 <script type="text/javascript">
-	function yesnoCheck() {
+  function yesnoCheck() {
     if (document.getElementById('yesCheck').checked) {
         document.getElementById('ifYes').style.visibility = 'visible';
 
     }
     else {
-    	document.getElementById('ifYes').style.visibility = 'hidden';
+      document.getElementById('ifYes').style.visibility = 'hidden';
     }
 
 }
@@ -32,15 +32,16 @@
             </h1>
             <div id="subHeader_43" class="form-subHeader">
               User already exists. Did you change the school ? &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<br>
-               <input type="radio" onclick="javascript:yesnoCheck();" name="yes" id="yesCheck"> Yes <br> 
-               <input type="radio" onclick="javascript:yesnoCheck();" name="no" id="noCheck"> No <br>
+               <input type="radio" onclick="javascript:yesnoCheck();" name="yesno" id="yesCheck"> Yes <br> 
+               <input type="radio" onclick="javascript:yesnoCheck();" name="yesno" id="noCheck"> No <br>
     
             </div>
           </div>
         </div>
-<form action="">
-	<!--common options-->
-	<li class="form-line jf-required" data-type="control_email" name="otherAnswer" id="otherAnswer" >
+<form action="" method="POST">
+  <!--common options-->
+  {% csrf_token %}
+  <li class="form-line jf-required" data-type="control_email" name="otherAnswer" id="otherAnswer" >
         <label class="form-label form-label-top form-label-auto" id="yes_options" for="yes_options">
           E-mail Address
           <span class="form-required">
@@ -54,7 +55,7 @@
           </span>
         </div>
       </li>
-	 <div class="container">
+   <div class="container">
         <div class="jumbotron">
        
         
@@ -72,9 +73,9 @@
          
 
      </div>
-		<!--options for Yes-->  
-		    <div id="ifYes" style="visibility:hidden">
-		     <li class="form-line jf-required" data-type="control_phone" id="id_42">
+    <!--options for Yes-->  
+        <div id="ifYes" style="visibility:hidden">
+         <li class="form-line jf-required" data-type="control_phone" id="id_42">
          <label class="form-label form-label-top form-label-auto" id="label_42" >
             Class <span class="form-required">
             * 
@@ -86,11 +87,11 @@
               <option value="12">12</option>        
            </select> </label></span>
          </li>
-  		</div>
-  			<form method="" action="Update">
-  		  		<button type="submit">Update </button>
-  		  	</form>
-             	<!--input type="submit" value="Update Enrollment"-->
+      </div>
+        <form method="POST" action="Update">
+            <button type="submit">Update </button>
+          </form>
+              <!--input type="submit" value="Update Enrollment"-->
  <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
   <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
  <script >
