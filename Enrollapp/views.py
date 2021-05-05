@@ -20,6 +20,14 @@ def handle404(request, exception):
      return render(request, 'enrollapp/404.html', status=404)
 
 
+def get_schoolName(request):
+    """returns the list of school name typed in input field."""
+    qs = Schools.objects.filter(Name__icontains = request.GET.get('term')) #i stands for case insensitive
+    school_name = list() #the url in javascript expects an json response
+    for school in qs:
+        school_name.append(school.Name)
+
+    return JsonResponse(school_name, safe=False)
 
 #logic to create account in NagaedEd digital and enroll user to corresponsing class courses
 @csrf_exempt
@@ -27,13 +35,7 @@ def create_account_NDS(request):
     print("in create account")
     try:
         if 'term' in request.GET:
-            print("in create account")
-            qs = Schools.objects.filter(Name__icontains = request.GET.get('term')) #i stands for case insensitive
-            school_name = list() #the url in javascript expects an json response
-            for school in qs:
-                school_name.append(school.Name)
-    
-            return JsonResponse(school_name, safe=False)
+            return get_schoolName(request)            
         elif request.method=="POST":
             registered = False
             #user  = User.objects.create_user(username=request.POST.get("q55_emailAddress"), email=request.POST.get("q55_emailAddress"),password=user.set_unusable_password())    
@@ -261,12 +263,7 @@ def register(request):
     profile_form = UserProfileInfoForm()
     #code for autocomplete search used to fetch school name from database
     if 'term' in request.GET:
-        qs = Schools.objects.filter(Name__icontains = request.GET.get('term')) #i stands for case insensitive
-        school_name = list() #the url in javascript expects an json response
-        for school in qs:
-            school_name.append(school.Name)
-
-        return JsonResponse(school_name, safe=False)
+        return get_schoolName(request)
     elif request.method=="POST":
         API_URL = "https://learn.nagaed.com/"
             # Canvas API key
@@ -322,13 +319,7 @@ def register(request):
 def old_user_update(request):
     try:
         if 'term' in request.GET:
-            print("in create account")
-            qs = Schools.objects.filter(Name__icontains = request.GET.get('term')) #i stands for case insensitive
-            school_name = list() #the url in javascript expects an json response
-            for school in qs:
-                school_name.append(school.Name)
-    
-            return JsonResponse(school_name, safe=False)
+           return get_schoolName(request)
         elif request.method=="POST":  
             email = request.POST.get("q55_emailAddress") 
             djemail.send_email(
@@ -342,49 +333,3 @@ def old_user_update(request):
     except Exception as e:
         return render(request,'enrollapp/error_page.html',{"name": str(e)})
         
-    '''
-    try:
-        if 'term' in request.GET:
-            qs = Schools.objects.filter(Name__istartswith = request.GET.get('term')) #i stands for case insensitive
-            school_name = list() #the url in javascript expects an json response
-            for school in qs:
-                school_name.append(school.Name)
-    
-            return JsonResponse(school_name, safe=False)
-        elif request.method =="POST":
-            API_URL = "https://learn.nagaed.com/"
-                # Canvas API key
-            API_KEY = "puoPtPQS1lGkhuaPEhmTreh2MZTtj1clp4OEiZ1UVVpugZBOn76WBue5Zf3MKBl5"    
-            # Initialize a new Canvas object
-            canvas = Canvas(API_URL, API_KEY)
-            account = canvas.get_account(1)
-            email = request.POST.get("q55_emailAddress") 
-            new_school = request.POST.get("schoolname")
-            
-            try:
-                new_class = request.POST.get("class_school")
-            except:
-                old_class = UserProfileInfo.objects.filter(email=email)
-                old_class = old_class.standard             
-            sub_accounts =  account.get_subaccounts()
-            for accounts in sub_accounts:
-                if accounts.name.lower() == school_name.lower():
-                    sub_account = accounts
-            
-            #logic to get all courses for the standard of corresponding school school_name    
-            courses = sub_account.get_courses()
-        #get the school code and append the standard to it
-            school_code = "CHS"
-            for c in courses:
-                    if  school_code in c.sis_course_id:
-                        if not c.blueprint:
-                            c.enroll_user(user_Canvas.id)
-    
-        else:
-            return render(request,os.path.join("enrollapp","Old_user.html"))
-    except Exception as e:
-        if "UNIQUE" in str(e) or "ID already in use" in str(e):
-            msg = "User Already exists. Please Login to enroll."
-        else:
-            msg = str(e)
-        return render(request,'enrollapp/error_page.html',{"name": msg})'''
