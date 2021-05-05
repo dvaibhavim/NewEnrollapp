@@ -28,7 +28,7 @@ def create_account_NDS(request):
     try:
         if 'term' in request.GET:
             print("in create account")
-            qs = Schools.objects.filter(Name__istartswith = request.GET.get('term')) #i stands for case insensitive
+            qs = Schools.objects.filter(Name__icontains = request.GET.get('term')) #i stands for case insensitive
             school_name = list() #the url in javascript expects an json response
             for school in qs:
                 school_name.append(school.Name)
@@ -261,7 +261,7 @@ def register(request):
     profile_form = UserProfileInfoForm()
     #code for autocomplete search used to fetch school name from database
     if 'term' in request.GET:
-        qs = Schools.objects.filter(Name__istartswith = request.GET.get('term')) #i stands for case insensitive
+        qs = Schools.objects.filter(Name__icontains = request.GET.get('term')) #i stands for case insensitive
         school_name = list() #the url in javascript expects an json response
         for school in qs:
             school_name.append(school.Name)
@@ -323,7 +323,7 @@ def old_user_update(request):
     try:
         if 'term' in request.GET:
             print("in create account")
-            qs = Schools.objects.filter(Name__istartswith = request.GET.get('term')) #i stands for case insensitive
+            qs = Schools.objects.filter(Name__icontains = request.GET.get('term')) #i stands for case insensitive
             school_name = list() #the url in javascript expects an json response
             for school in qs:
                 school_name.append(school.Name)
