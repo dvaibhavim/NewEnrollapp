@@ -37,7 +37,7 @@ def create_canvas_account(profile, user, request):
     """creates user account in canvas."""
     try:
         API_URL = "https://learn.nagaed.com/"
-                # Canvas API key
+        # Canvas API key
         API_KEY = "puoPtPQS1lGkhuaPEhmTreh2MZTtj1clp4OEiZ1UVVpugZBOn76WBue5Zf3MKBl5"
         canvas = Canvas(API_URL, API_KEY)
         if request.method=="POST":
@@ -75,8 +75,7 @@ def create_canvas_account(profile, user, request):
 def enroll_user_to_course(user_Canvas, account, request, school_name):
     """ assigns course to students."""
     registered = True
-    # remove the school name and set the sisid of the school or account number here
-    
+    # remove the school name and set the sisid of the school or account number here    
     sub_accounts =  account.get_subaccounts()
     for accounts in sub_accounts:
         if accounts.name.lower() == school_name.lower():
@@ -84,7 +83,7 @@ def enroll_user_to_course(user_Canvas, account, request, school_name):
    
     # logic to get all courses for the standard of corresponding school    
     courses = sub_account.get_courses()
-    #cget the school code and append the standard to it
+    # get the school code and append the standard to it
     standard = request.POST.get("class_school")
     standard = int(standard)    
     print(sub_account, standard)
@@ -105,14 +104,14 @@ def enroll_user_to_course(user_Canvas, account, request, school_name):
 
 @csrf_exempt
 def create_account_NDS(request):
-    """create account in NagaedEd digital and enroll user to corresponsing class courses."""
+    """ create account in NagaedEd digital and enroll user to corresponsing class courses."""
     try:
         if 'term' in request.GET:
             return get_schoolName(request)            
         elif request.method=="POST":
             registered = False          
             user  = User.objects.create_user(username=request.POST.get("q55_emailAddress"), email=request.POST.get("q55_emailAddress"))    
-            #user.set_password(set_unusable_password())
+            # user.set_password(set_unusable_password())
             try:
                 sis_id = UserProfileInfo.objects.order_by('sis_id').last()
                 profile = UserProfileInfo.objects.create(user = user, date_of_birth=request.POST.get("q39_birthDate39[day]")+"/"+request.POST.get("q39_birthDate39[month]")+"/"+request.POST.get("q39_birthDate39[year]"), firstname = request.POST.get("q56_name[first]"), lastname = request.POST.get("q56_name[last]"), gender = request.POST.get("Gender"), Role = request.POST.get("role"),standard = request.POST.get("class_school"), sis_id = int(sis_id.sis_id)+1)
@@ -156,12 +155,12 @@ def create_account_CHSS(request):
         if request.method=="POST":
             registered = False
             user  = User.objects.create_user(request.POST.get("q55_emailAddress"), request.POST.get("q55_emailAddress"))
-            user.set_password(user.set_unusable_password())
+            #user.set_password(user.set_unusable_password())
             user.save()      
             sis_id = UserProfileInfo.objects.order_by('sis_id').last()  
-            #remove the school name and set the sisid of the school or account number here
+            # remove the school name and set the sisid of the school or account number here
             school_name = "Christian Standard Higher Secondary School"     
-            profile = UserProfileInfo.objects.create(user = user, date_of_birth=request.POST.get("q39_birthDate39[day]")+"/"+request.POST.get("q39_birthDate39[month]")+"/"+request.POST.get("q39_birthDate39[year]"), firstname = request.POST.get("q56_name[first]"), lastname = request.POST.get("q56_name[last]"), gender = request.POST.get("Gender"), Role = request.POST.get("role"), standard = request.POST.get("class_school"), sis_id = int(sis_id.sis_id)+1 )
+            profile = UserProfileInfo.objects.create(user = user, date_of_birth = request.POST.get("q39_birthDate39[day]")+"/"+request.POST.get("q39_birthDate39[month]") + "/" + request.POST.get("q39_birthDate39[year]"), firstname = request.POST.get("q56_name[first]"), lastname = request.POST.get("q56_name[last]"), gender = request.POST.get("Gender"), Role = request.POST.get("role"), standard = request.POST.get("class_school"), sis_id = int(sis_id.sis_id)+1 )
             profile.save()         
             result = create_canvas_account(profile, user, request)
             if result[0]:
@@ -177,13 +176,40 @@ def create_account_CHSS(request):
         return render(request, 'enrollapp/update_school_sucess.html', {"name": user.username,"school": school_name})
     except Exception as e:
         if "UNIQUE" in str(e) or "ID already in use" in str(e):
-            result = create_canvas_account(profile, user, request)
-            if result[0]:
-                user_Canvas, account = result[1], result[2]
-                school_name = "NagaEd Digital School"
-                assignCourseToStudent = enroll_user_to_course(user_Canvas, account, request, school_name)
+            from canvasapi import Canvas            
+            API_URL = "https://learn.nagaed.com/"
+            API_KEY = "puoPtPQS1lGkhuaPEhmTreh2MZTtj1clp4OEiZ1UVVpugZBOn76WBue5Zf3MKBl5"
+            canvas = Canvas(API_URL, API_KEY)
             
-            return render(request, 'enrollapp/update_school_sucess.html', {"name": email,"school": school_name})
+            account = canvas.get_account(1)
+            user_c = account.get_users()
+            email = request.POST.get("q55_emailAddress")
+            for u in user_c:
+                if u.login_id==email:
+                    u = u.id
+                    break
+            
+            school_name = "Christian Standard Higher Secondary School"  
+            sub_accounts =  account.get_subaccounts()
+            for accounts in sub_accounts:
+                if accounts.name.lower() == school_name.lower():
+                    sub_account = accounts
+               
+            #logic to get all courses for the standard of corresponding school school_name    
+            courses = sub_account.get_courses()
+        #get the school code and append the standard to it
+            standard = request.POST.get("class_school")
+            standard = int(standard)    
+            #school_code = "CHS"
+            if standard<10:
+                std ="CL0"+str(standard)
+            else:
+                std = "CL"+str(standard)
+            for c in courses:
+                if  std in c.sis_course_id:
+                    if not c.blueprint:
+                        c.enroll_user(u)
+            return render(request,'enrollapp/update_school_sucess.html',{"name":email,"school":school_name})
         else:
             msg = str(e)
             return render(request, 'enrollapp/error_page.html', {"name": msg})
@@ -240,10 +266,11 @@ def register(request):
                             c.enroll_user(user_Canvas.id)
     else:
         return render(request, 'enrollapp/Enroll_form_Nagaed_Digital.html')
-    return render(request, 'enrollapp/update_school_success.html')    
-    
+    return render(request, 'enrollapp/update_school_success.html')
 
-"""function to create new user and send registration email. If the account gets created, course is also assigned to the student. """
+
+"""function to create new user and send registration email.
+If the account gets created, course is also assigned to the student. """
 @csrf_exempt
 def old_user_update(request):
     try:
