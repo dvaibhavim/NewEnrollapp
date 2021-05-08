@@ -33,8 +33,7 @@ def get_schoolName(request):
     return JsonResponse(school_name, safe=False)
 
 
-def create_canvas_account(profile, user, request):
-    """creates user account in canvas."""
+def create_canvas_account(profile, request):
     try:
         API_URL = "https://learn.nagaed.com/"
                 # Canvas API key
@@ -73,7 +72,6 @@ def create_canvas_account(profile, user, request):
 
 
 def enroll_user_to_course(user_Canvas, account, request, school_name):
-    """ assigns course to students."""
     registered = True
     # remove the school name and set the sisid of the school or account number here
     
@@ -120,24 +118,23 @@ def create_account_NDS(request):
             except AttributeError:
                 sis_id = 1
                 profile = UserProfileInfo.objects.create(user = user, date_of_birth=request.POST.get("q39_birthDate39[day]")+"/"+request.POST.get("q39_birthDate39[month]")+"/"+request.POST.get("q39_birthDate39[year]"), firstname = request.POST.get("q56_name[first]"), lastname = request.POST.get("q56_name[last]"), gender = request.POST.get("Gender"), Role = request.POST.get("role"), standard = request.POST.get("class_school"), sis_id = 1)
-            result = create_canvas_account(profile, user, request)
-            print("result", result)
+            result = create_canvas_account(profile, request)
             if result[0]:
                 user_Canvas, account = result[1], result[2]
-                user.save()   
-                profile.save()
                 school_name = "NagaEd Digital School"
                 assignCourseToStudent = enroll_user_to_course(user_Canvas, account, request, school_name)
                 if not assignCourseToStudent:
                     msg = assignCourseToStudent
-                    return render(request, 'enrollapp/error_page.html', {"name": msg})                
+                return render(request, 'enrollapp/error_page.html', {"name": msg})                
             else:
-                if "UNIQUE" in result or "ID already in use" in result:
+                if "UNIQUE" in str(e) or "ID already in use" in str(e):
                     msg = "User Already exists. Please Login to enroll."
                 else:
-                    msg = str(result)
-                return render(request, 'enrollapp/error_page.html', {"name": msg})            
-                
+                    msg = str(e)
+                return render(request, 'enrollapp/error_page.html', {"name": msg})
+            
+            user.save()   
+            profile.save()    
         else:
             return render(request, 'enrollapp/Enroll_form_Nagaed_Digital.html')
         return render(request, 'enrollapp/update_school_sucess.html', {"name": user.username,"school": school_name})
@@ -150,8 +147,8 @@ def create_account_NDS(request):
 
 
 @csrf_exempt
-def create_account_CHSS(request):
-    """ creates a subsccount in Christian Standard Higher Secondary School."""
+def create_account_CHSS(request):\
+    """ creates a subsccount in Christian Standard Higher Secondary School"""
     try:
         if request.method=="POST":
             registered = False
@@ -163,21 +160,22 @@ def create_account_CHSS(request):
             school_name = "Christian Standard Higher Secondary School"     
             profile = UserProfileInfo.objects.create(user = user, date_of_birth=request.POST.get("q39_birthDate39[day]")+"/"+request.POST.get("q39_birthDate39[month]")+"/"+request.POST.get("q39_birthDate39[year]"), firstname = request.POST.get("q56_name[first]"), lastname = request.POST.get("q56_name[last]"), gender = request.POST.get("Gender"), Role = request.POST.get("role"), standard = request.POST.get("class_school"), sis_id = int(sis_id.sis_id)+1 )
             profile.save()         
-            result = create_canvas_account(profile, user, request)
+            result = create_canvas_account(profile, request)
             if result[0]:
                 user_Canvas, account = result[1], result[2]
+                school_name = "NagaEd Digital School"
                 assignCourseToStudent = enroll_user_to_course(user_Canvas, account, request, school_name)
             else:
-                if "UNIQUE" in result or "ID already in use" in result:
+                if "UNIQUE" in str(e) or "ID already in use" in str(e):
                     msg = "User Already exists. Please Login to enroll."
                 else:
-                    msg = str(result)                
+                    msg = str(e)                
         else:
             return render(request, 'enrollapp/enroll_form.html')
         return render(request, 'enrollapp/update_school_sucess.html', {"name": user.username,"school": school_name})
     except Exception as e:
         if "UNIQUE" in str(e) or "ID already in use" in str(e):
-            result = create_canvas_account(profile, user, request)
+            result = create_canvas_account(profile, request)
             if result[0]:
                 user_Canvas, account = result[1], result[2]
                 school_name = "NagaEd Digital School"
@@ -240,8 +238,14 @@ def register(request):
                             c.enroll_user(user_Canvas.id)
     else:
         return render(request, 'enrollapp/Enroll_form_Nagaed_Digital.html')
-    return render(request, 'enrollapp/update_school_success.html')    
+    return render(request, 'enrollapp/update_school_success.html')
+
+       
     
+
+
+
+
 
 """function to create new user and send registration email. If the account gets created, course is also assigned to the student. """
 @csrf_exempt
