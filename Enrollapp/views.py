@@ -264,7 +264,7 @@ def register(request):
     #code for autocomplete search used to fetch school name from database
     if 'term' in request.GET:
         return get_schoolName(request)
-    elif request.method=="POST":
+    elif request.method == "POST":
         API_URL = "https://learn.nagaed.com/"
             # Canvas API key
         API_KEY = "puoPtPQS1lGkhuaPEhmTreh2MZTtj1clp4OEiZ1UVVpugZBOn76WBue5Zf3MKBl5"    
