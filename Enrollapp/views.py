@@ -112,15 +112,17 @@ def create_account_NDS(request):
             registered = False          
             user  = User.objects.create_user(username=request.POST.get("q55_emailAddress"), email=request.POST.get("q55_emailAddress"))    
             # user.set_password(set_unusable_password())
+            result_schoolname = request.POST.get('schoolname')
+            result_schoolname = Schools.objects.get(Name = result_schoolname)
+            
             try:
                 sis_id = UserProfileInfo.objects.order_by('sis_id').last()
-                profile = UserProfileInfo.objects.create(user = user, date_of_birth=request.POST.get("q39_birthDate39[day]")+"/"+request.POST.get("q39_birthDate39[month]")+"/"+request.POST.get("q39_birthDate39[year]"), firstname = request.POST.get("q56_name[first]"), lastname = request.POST.get("q56_name[last]"), gender = request.POST.get("Gender"), Role = request.POST.get("role"),standard = request.POST.get("class_school"), sis_id = int(sis_id.sis_id)+1)
+                profile = UserProfileInfo.objects.create(user = user, date_of_birth=request.POST.get("q39_birthDate39[day]")+"/"+request.POST.get("q39_birthDate39[month]")+"/"+request.POST.get("q39_birthDate39[year]"), firstname = request.POST.get("q56_name[first]"), lastname = request.POST.get("q56_name[last]"), gender = request.POST.get("Gender"), Role = request.POST.get("role"),standard = request.POST.get("class_school"), sis_id = int(sis_id.sis_id)+1, school_name = result_schoolname)
     
             except AttributeError:
                 sis_id = 1
-                profile = UserProfileInfo.objects.create(user = user, date_of_birth=request.POST.get("q39_birthDate39[day]")+"/"+request.POST.get("q39_birthDate39[month]")+"/"+request.POST.get("q39_birthDate39[year]"), firstname = request.POST.get("q56_name[first]"), lastname = request.POST.get("q56_name[last]"), gender = request.POST.get("Gender"), Role = request.POST.get("role"), standard = request.POST.get("class_school"), sis_id = 1)
+                profile = UserProfileInfo.objects.create(user = user, date_of_birth=request.POST.get("q39_birthDate39[day]")+"/"+request.POST.get("q39_birthDate39[month]")+"/"+request.POST.get("q39_birthDate39[year]"), firstname = request.POST.get("q56_name[first]"), lastname = request.POST.get("q56_name[last]"), gender = request.POST.get("Gender"), Role = request.POST.get("role"), standard = request.POST.get("class_school"), sis_id = 1, school_name = result_schoolname)
             result = create_canvas_account(profile, user, request)
-            print("result", result)
             if result[0]:
                 user_Canvas, account = result[1], result[2]
                 user.save()   
@@ -159,8 +161,10 @@ def create_account_CHSS(request):
             user.save()      
             sis_id = UserProfileInfo.objects.order_by('sis_id').last()  
             # remove the school name and set the sisid of the school or account number here
-            school_name = "Christian Standard Higher Secondary School"     
-            profile = UserProfileInfo.objects.create(user = user, date_of_birth = request.POST.get("q39_birthDate39[day]")+"/"+request.POST.get("q39_birthDate39[month]") + "/" + request.POST.get("q39_birthDate39[year]"), firstname = request.POST.get("q56_name[first]"), lastname = request.POST.get("q56_name[last]"), gender = request.POST.get("Gender"), Role = request.POST.get("role"), standard = request.POST.get("class_school"), sis_id = int(sis_id.sis_id)+1 )
+            school_name = "Christian Standard Higher Secondary School"   
+            result_schoolname = request.POST.get('schoolname')
+            result_schoolname = Schools.objects.get(Name = result_schoolname)  
+            profile = UserProfileInfo.objects.create(user = user, date_of_birth = request.POST.get("q39_birthDate39[day]")+"/"+request.POST.get("q39_birthDate39[month]") + "/" + request.POST.get("q39_birthDate39[year]"), firstname = request.POST.get("q56_name[first]"), lastname = request.POST.get("q56_name[last]"), gender = request.POST.get("Gender"), Role = request.POST.get("role"), standard = request.POST.get("class_school"), sis_id = int(sis_id.sis_id)+1, school_name = result_schoolname)
             profile.save()         
             result = create_canvas_account(profile, user, request)
             if result[0]:
